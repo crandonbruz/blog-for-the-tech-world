@@ -1,81 +1,39 @@
 const router = require("express").Router();
 const { Comment } = require("../../models");
 const withAuth = require("../../utils/auth");
-router.get("/", (req, res) => {
-  Comment.findAll({})
-    .then((dbCommentData) => res.json(dbCommentData))
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
-router.get("/:id", (req, res) => {
-  Comment.findAll({
-    where: {
-      id: req.params.id,
-    }
-      .then((dbCommentData) => res.json(dbCommentData))
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-      }),
-  });
-});
 
 router.post("/", withAuth, (req, res) => {
-  if (req.session) {
-    Comment.create({
-      comment_text: req.body.comment_text,
-      post_id: req.body.post_id,
+  console.log(req.body);
+  try {
+    const newCommet = Comment.create({
+      ...req.body,
       user_id: req.session.user.id,
-    })
-      .then((dbCommentData) => res.json(dbCommentData))
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-      });
+    });
+
+    res.status(200).json(newCommet);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
   }
 });
 
-router.put("/:id", withAuth, (req, res) => {
-  Comment.update(
-    {
-      comment_text: req.body.comment_text,
-    },
-    {
-      where: { id: req.params.id },
-    }
-  )
-    .then((dbCommentData) => {
-      if (!dbCommentData) {
-        res.status(404).json({ message: "Comment not found with the id" });
-        return;
-      }
-      res.json(dbCommentData);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
 router.delete("/:id", withAuth, (req, res) => {
-  Comment.destroy({
-    where: {
-      id: req.params.id,
-    },
-  })
-    .then((dbCommentData) => {
-      if (!dbCommentData) {
-        res.status(404).json({ message: "Comment not found with the id" });
-        return;
-      }
-      res.json(dbCommentData);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
+  try {
+    const commentData = Comment.destroy({
+      where: {
+        id: req.params.id,
+        user_id: req.session.user_id,
+      },
     });
+
+    if (!commentData) {
+      res.status(404).json({ message: "Comment not found with the id" });
+      return;
+    }
+    res.status(200).json(commentData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
 });
 module.exports = router;
