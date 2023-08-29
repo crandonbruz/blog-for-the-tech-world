@@ -3,6 +3,7 @@ const { User } = require("../../models");
 // const sequelize = require("../config/connection");
 
 router.post("/", async (req, res) => {
+  console.log(req.body);
   try {
     const userData = await User.create(req.body);
 
