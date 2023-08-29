@@ -1,0 +1,22 @@
+<div class="row mb-3 post">
+  <div class="col">
+    <h2>{{post.title}}</h2>
+    <p>{{post.content}}</p>
+  </div>
+</div>
+
+<h1>Add a Comment</h1>
+<form class="d-flex flec-column" id="newComment">
+  <label for="newComment">Content</label>
+  <textarea name="content" id="content" cols="3" rows="10"></textarea>
+  <input type="hidden" id="postId" value={{post.id}} />
+  <button>Submit</button>
+</form>
+
+<h1>All Comments</h1>
+{{#each post.comments as |comment|}}
+  <div>
+    <p>{{comment.content}}</p>
+  </div>
+{{/each}}
+<script src="/js/comment.js"></script>
