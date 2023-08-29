@@ -1,4 +1,4 @@
-<div class="row mb-3 post">
+<div class="row mb-4 post">
   <div class="col">
     <h2>{{post.title}}</h2>
     <p>{{post.content}}</p>
@@ -6,9 +6,9 @@
 </div>
 
 <h1>Add a Comment</h1>
-<form class="d-flex flec-column" id="newComment">
+<form class="d-flex flex-column" id="newComment">
   <label for="newComment">Content</label>
-  <textarea name="content" id="content" cols="3" rows="10"></textarea>
+  <textarea name="content" id="content" rows="3"></textarea>
   <input type="hidden" id="postId" value={{post.id}} />
   <button>Submit</button>
 </form>
